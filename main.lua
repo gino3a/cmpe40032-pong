@@ -2,8 +2,8 @@
     CPE40032
     Pong Remake
 
-    pong-7
-    "The Collision Update"
+    pong-8
+    "The Score Update"
 
     -- Main Program --
 
@@ -145,6 +145,22 @@ function love.update(dt)
         end
     end
 
+    -- if we reach the left or right edge of the screen,
+    -- go back to start and update the score
+    if ball.x < 0 then
+        servingPlayer = 1
+        player2Score = player2Score + 1
+        ball:reset()
+        gameState = 'start'
+    end
+
+    if ball.x > VIRTUAL_WIDTH then
+        servingPlayer = 2
+        player1Score = player1Score + 1
+        ball:reset()
+        gameState = 'start'
+    end
+
     -- player 1 movement
     if love.keyboard.isDown('w') then
         player1.dy = -PADDLE_SPEED
@@ -210,12 +226,6 @@ function love.draw()
 
     -- draw different things based on the state of the game
     love.graphics.setFont(smallFont)
-
-    if gameState == 'start' then
-        love.graphics.printf('Hello Start State!', 0, 20, VIRTUAL_WIDTH, 'center')
-    else
-        love.graphics.printf('Hello Play State!', 0, 20, VIRTUAL_WIDTH, 'center')
-    end
 
     -- draw score on the left and right center of the screen
     -- need to switch font to draw before actually printing
